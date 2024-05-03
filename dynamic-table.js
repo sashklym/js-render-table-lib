@@ -1,7 +1,7 @@
 // ---------------
 // Hot to use:
 // const columns = ['name', 'age', 'email', 'actions'];
-// const data = [];
+// const data = [ { id: 1, name: 'Sasha', age: 20, email: 'test@gmail.com'}];
 // const table = new DynamicTable('#data', columns, data, onEdit, onDelete);
 // table.render();
 // ---------------
