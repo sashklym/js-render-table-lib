@@ -1,9 +1,13 @@
 // ---------------
-// Hot to use:
+// ***************
+// This is a simple class that renders a table with dynamic columns and data. 
+// It also allows to add actions for each row.
+// ***************
+// How to use:
 // const columns = ['name', 'age', 'email', { name: 'actions', list: [{ type: 'delete', name: 'delete me' }];
 // const data = [ { id: 1, name: 'Sasha', age: 20, email: 'test@gmail.com'}];
-// const table = new DynamicTable('#data', columns, data);
-// table.render();
+// const actions = { delete: (id) => { console.log('Delete was triggered for id', id); } };
+// new DynamicTable('#data', columns, data, actions, { table: 'table', rowPrefix: 'row', cell: 'cell' });
 // ---------------
 class DynamicTable {
     constructor(container, columns, data, actions, styleClasses = {}) {
@@ -20,6 +24,7 @@ class DynamicTable {
             edit: () => { console.log('Edit was triggered') },
             ...actions
         };
+        this.render();
     }
 
     render() {
