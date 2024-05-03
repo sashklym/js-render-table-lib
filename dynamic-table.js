@@ -28,18 +28,38 @@ class DynamicTable {
     }
 
     render() {
-        const self = this;
         const insertToEl = document.querySelector(this.container);
         if (!insertToEl) {
+            console.error(`Element with selector ${this.container} was not found`);
             return;
         }
-        let html = `<table class=${this.styleClasses.table}><tr>`;
-        this.columns.forEach((col) => {
-            const isPropertyCol = typeof col !== 'string';
-            html += `<th>${(isPropertyCol ? col.name : col).toUpperCase()}</th>`
-        });
-        html += '</tr>';
+        const html = `
+            <table class=${this.styleClasses.table}>
+                ${this._renderHeaderRow()}
+                ${this._renderDataRows()}
+            </table>
+        `;
+        insertToEl.insertAdjacentHTML('beforeend', html);
 
+        const buttons = insertToEl.querySelectorAll('table button');
+        buttons.forEach((button) => {
+            button.addEventListener('click', this._handleActionClick.bind(this));
+        });
+    }
+
+    _handleActionClick(event) {
+        const target = event.target;
+        const id = target.getAttribute('data-id');
+        const type = target.getAttribute('data-type');
+        if (this.actions[type]) {
+            this.actions[type](id);
+            return
+        }
+        console.log(`Action ${type} was triggered for id ${id}, but no handler was found`);
+    }
+
+    _renderDataRows() {
+        let html = '';
         this.data.forEach((dataItem) => {
             html += `<tr class="${this.styleClasses.rowPrefix}-${dataItem.id}">`;
             this.columns.forEach((col) => {
@@ -53,27 +73,20 @@ class DynamicTable {
                     return;
                 }
                 const dataValue = dataItem[col] ? dataItem[col] : '';
-                html += `<td class="${this.styleClasses.cell}" data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
+                html += `<td class="${this.styleClasses.cell}" data-property="${col}" data-value="${dataValue}">${dataValue}</td>`;
             });
             html += '</tr>';
         });
-        html += '</table>';
-        insertToEl.innerHTML = html;
+        return html;
+    }
 
-        function handleActionClick(event) {
-            const target = event.target;
-            const id = target.getAttribute('data-id');
-            const type = target.getAttribute('data-type');
-            if (self.actions[type]) {
-                self.actions[type](id);
-                return
-            }
-            console.log(`Action ${type} was triggered for id ${id}, but no handler was found`);
-        }
-
-        const buttons = insertToEl.querySelectorAll('table button');
-        buttons.forEach((button) => {
-            button.addEventListener('click', handleActionClick);
+    _renderHeaderRow() {
+        let html = '<tr>';
+        this.columns.forEach((col) => {
+            const isPropertyCol = typeof col !== 'string';
+            html += `<th>${(isPropertyCol ? col.name : col).toUpperCase()}</th>`;
         });
+        html += '</tr>';
+        return html;
     }
 }
