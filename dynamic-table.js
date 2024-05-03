@@ -1,6 +1,6 @@
 // ---------------
 // Hot to use:
-// const columns = ['name', 'age', 'email', 'actions'];
+// const columns = ['name', 'age', 'email', { name: 'actions', list: [{ type: 'delete', name: 'delete me' }];
 // const data = [ { id: 1, name: 'Sasha', age: 20, email: 'test@gmail.com'}];
 // const table = new DynamicTable('#data', columns, data);
 // table.render();
@@ -42,7 +42,7 @@ class DynamicTable {
                 if (isPropertyCol) {
                     html += `<td>`;
                     col.list.forEach((action) => {
-                        html += `<button data-selector="${this.container}" data-type="${action}" data-id="${dataItem.id}" style="margin-right:5px">${action}</button>`;
+                        html += `<button data-selector="${this.container}" data-type="${action.type}" data-id="${dataItem.id}" style="margin-right:5px">${action.name}</button>`;
                     });
                     html += `</td>`;
                     return;
