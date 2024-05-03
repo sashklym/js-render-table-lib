@@ -1,8 +1,13 @@
 class DynamicTable {
-    constructor(container, columns, data, onEdit, onDelete) {
+    constructor(container, columns, data, onEdit, onDelete, styleClasses = {}) {
         this.container = container;
         this.columns = columns;
         this.data = data;
+        this.styleClasses = {
+            table: styleClasses.table || 'table',
+            rowPrefix: styleClasses.rowPrefix || 'row',
+            cell: styleClasses.cell || 'cell',
+        };
         this.onEdit = onEdit;
         this.onDelete = onDelete;
     }
@@ -13,7 +18,7 @@ class DynamicTable {
         if (!insertToEl) {
             return;
         }
-        let html = '<table><tr>';
+        let html = `<table class=${this.styleClasses.table}><tr>`;
         this.columns.forEach((col) => {
             const isPropertyCol = typeof col !== 'string';
             html += `<th>${(isPropertyCol ? col.name : col).toUpperCase()}</th>`
@@ -21,7 +26,7 @@ class DynamicTable {
         html += '</tr>';
 
         this.data.forEach((dataItem) => {
-            html += `<tr class="user-${dataItem.id}">`;
+            html += `<tr class="${this.styleClasses.rowPrefix}-${dataItem.id}">`;
             this.columns.forEach((col) => {
                 const isPropertyCol = typeof col !== 'string';
                 if (isPropertyCol) {
@@ -33,7 +38,7 @@ class DynamicTable {
                     return;
                 }
                 const dataValue = dataItem[col] ? dataItem[col] : '';
-                html += `<td data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
+                html += `<td class=${this.styleClasses.cell} data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
             });
             html += '</tr>';
         });
