@@ -39,13 +39,13 @@ class DynamicTable {
                 if (isPropertyCol) {
                     html += `<td>`;
                     col.list.forEach((action) => {
-                        html += `<button data-selector="${this.container}" data-type="${action}" data-user="${dataItem.id}" style="margin-right:5px">${action}</button>`;
+                        html += `<button data-selector="${this.container}" data-type="${action}" data-id="${dataItem.id}" style="margin-right:5px">${action}</button>`;
                     });
                     html += `</td>`;
                     return;
                 }
                 const dataValue = dataItem[col] ? dataItem[col] : '';
-                html += `<td class=${this.styleClasses.cell} data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
+                html += `<td class="${this.styleClasses.cell}" data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
             });
             html += '</tr>';
         });
@@ -54,7 +54,7 @@ class DynamicTable {
 
         function handleButtonClick(event) {
             const target = event.target;
-            const id = target.getAttribute('data-user');
+            const id = target.getAttribute('data-id');
             const type = target.getAttribute('data-type');
             if (type === 'edit') {
                 self.onEdit(event.target);
