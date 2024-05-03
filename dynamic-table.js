@@ -20,19 +20,19 @@ class DynamicTable {
         });
         html += '</tr>';
 
-        this.data.forEach((user) => {
-            html += `<tr class="user-${user.id}">`;
+        this.data.forEach((dataItem) => {
+            html += `<tr class="user-${dataItem.id}">`;
             this.columns.forEach((col) => {
                 const isPropertyCol = typeof col !== 'string';
                 if (isPropertyCol) {
                     html += `<td>`;
                     col.list.forEach((action) => {
-                        html += `<button data-selector="${this.container}" data-type="${action}" data-user="${user.id}" style="margin-right:5px">${action}</button>`;
+                        html += `<button data-selector="${this.container}" data-type="${action}" data-user="${dataItem.id}" style="margin-right:5px">${action}</button>`;
                     });
                     html += `</td>`;
                     return;
                 }
-                const dataValue = user[col] ? user[col] : '';
+                const dataValue = dataItem[col] ? dataItem[col] : '';
                 html += `<td data-property="${col}" data-value="${dataValue}">${dataValue}</td>`
             });
             html += '</tr>';
