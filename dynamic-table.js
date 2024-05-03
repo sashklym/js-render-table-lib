@@ -2,11 +2,11 @@
 // Hot to use:
 // const columns = ['name', 'age', 'email', 'actions'];
 // const data = [ { id: 1, name: 'Sasha', age: 20, email: 'test@gmail.com'}];
-// const table = new DynamicTable('#data', columns, data, onEdit, onDelete);
+// const table = new DynamicTable('#data', columns, data);
 // table.render();
 // ---------------
 class DynamicTable {
-    constructor(container, columns, data, onEdit, onDelete, styleClasses = {}) {
+    constructor(container, columns, data, actions, styleClasses = {}) {
         this.container = container;
         this.columns = columns;
         this.data = data;
@@ -15,8 +15,11 @@ class DynamicTable {
             rowPrefix: styleClasses.rowPrefix || 'row',
             cell: styleClasses.cell || 'cell',
         };
-        this.onEdit = onEdit;
-        this.onDelete = onDelete;
+        this.actions = { 
+            delete: () => { console.log('Delete was triggered'); }, 
+            edit: () => { console.log('Edit was triggered') },
+            ...actions
+        };
     }
 
     render() {
@@ -52,22 +55,20 @@ class DynamicTable {
         html += '</table>';
         insertToEl.innerHTML = html;
 
-        function handleButtonClick(event) {
+        function handleActionClick(event) {
             const target = event.target;
             const id = target.getAttribute('data-id');
             const type = target.getAttribute('data-type');
-            if (type === 'edit') {
-                self.onEdit(event.target);
-                return;
+            if (self.actions[type]) {
+                self.actions[type](id);
+                return
             }
-            self.onDelete(id);
-            const removedEl = insertToEl.querySelector(`.user-${id}`);
-            removedEl.classList.add('hide');
+            console.log(`Action ${type} was triggered for id ${id}, but no handler was found`);
         }
-        
+
         const buttons = insertToEl.querySelectorAll('table button');
         buttons.forEach((button) => {
-            button.addEventListener('click', handleButtonClick);
-        });    
+            button.addEventListener('click', handleActionClick);
+        });
     }
 }
