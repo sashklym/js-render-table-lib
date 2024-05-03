@@ -1,3 +1,10 @@
+// ---------------
+// Hot to use:
+// const columns = ['name', 'age', 'email', 'actions'];
+// const data = [];
+// const table = new DynamicTable('#data', columns, data, onEdit, onDelete);
+// table.render();
+// ---------------
 class DynamicTable {
     constructor(container, columns, data, onEdit, onDelete, styleClasses = {}) {
         this.container = container;
